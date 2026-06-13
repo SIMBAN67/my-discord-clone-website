@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Ultimate Workspace</title>
+    <title>SimbanChat Ultimate Workspace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -16,16 +16,20 @@
 <body class="flex h-screen w-full overflow-hidden select-none">
 
     <div id="auth-screen" class="absolute inset-0 bg-[#1e1f22] flex items-center justify-center z-50 p-4">
+        
         <div id="login-card" class="bg-[#313338] w-full max-w-[440px] rounded-lg p-8 shadow-2xl">
             <h2 class="text-2xl font-bold text-white text-center mb-1">Welcome back!</h2>
-            <p class="text-[#949ba4] text-sm text-center mb-6">Log in to enter your ultimate dashboard.</p>
+            <p class="text-[#949ba4] text-sm text-center mb-6">Log in to enter SimbanChat.</p>
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-[#b5bac1] mb-2">Username</label>
+                    <label class="block text-xs font-bold uppercase text-[#b5bac1] mb-2">Username or Email</label>
                     <input id="login-id" type="text" required class="w-full bg-[#1e1f22] rounded p-2.5 text-[#dbdee1] focus:outline-none focus:ring-2 focus:ring-[#5865f2]">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase text-[#b5bac1] mb-2">Password</label>
+                    <div class="flex justify-between mb-2">
+                        <label class="text-xs font-bold uppercase text-[#b5bac1]">Password</label>
+                        <span onclick="toggleAuthCard('forgot')" class="text-xs text-[#00a8fc] hover:underline cursor-pointer">Forgot your password?</span>
+                    </div>
                     <input id="login-password" type="password" required class="w-full bg-[#1e1f22] rounded p-2.5 text-[#dbdee1] focus:outline-none focus:ring-2 focus:ring-[#5865f2]">
                 </div>
                 <button type="submit" class="w-full bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium p-2.5 rounded transition-colors mt-2">Log In</button>
@@ -35,7 +39,7 @@
 
         <div id="register-card" class="hidden bg-[#313338] w-full max-w-[440px] rounded-lg p-8 shadow-2xl">
             <h2 class="text-2xl font-bold text-white text-center mb-1">Create an account</h2>
-            <p class="text-[#949ba4] text-sm text-center mb-6">Set up your profile credentials</p>
+            <p class="text-[#949ba4] text-sm text-center mb-6">Join SimbanChat today</p>
             <form onsubmit="handleRegister(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase text-[#b5bac1] mb-2">Email</label>
@@ -53,8 +57,22 @@
                     <label class="block text-xs font-bold uppercase text-[#b5bac1] mb-2">Password</label>
                     <input id="reg-password" type="password" required class="w-full bg-[#1e1f22] rounded p-2.5 text-[#dbdee1] focus:outline-none focus:ring-2 focus:ring-[#5865f2]">
                 </div>
-                <button type="submit" class="w-full bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium p-2.5 rounded transition-colors mt-2">Continue</button>
+                <button id="register-btn" type="submit" class="w-full bg-[#23a55a] hover:bg-[#1a7f43] text-white font-medium p-2.5 rounded transition-colors mt-2">Create Account</button>
                 <p class="text-sm text-[#949ba4] mt-4">Already have an account? <span onclick="toggleAuthCard('login')" class="text-[#00a8fc] hover:underline cursor-pointer">Log In</span></p>
+            </form>
+        </div>
+
+        <div id="forgot-card" class="hidden bg-[#313338] w-full max-w-[440px] rounded-lg p-8 shadow-2xl">
+            <h2 class="text-2xl font-bold text-white text-center mb-1">Account Recovery</h2>
+            <p class="text-[#949ba4] text-sm text-center mb-6">Enter your email to instantly retrieve your account credentials.</p>
+            
+            <form onsubmit="handleForgotPasswordRequest(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-[#b5bac1] mb-2">Your Email Address</label>
+                    <input id="forgot-email" type="email" required class="w-full bg-[#1e1f22] rounded p-2.5 text-[#dbdee1] focus:outline-none focus:ring-2 focus:ring-[#5865f2]">
+                </div>
+                <button type="submit" class="w-full bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium p-2.5 rounded transition-colors mt-2">Recover Password</button>
+                <p class="text-sm text-[#00a8fc] hover:underline cursor-pointer text-center mt-4" onclick="toggleAuthCard('login')">Back to Sign In</p>
             </form>
         </div>
     </div>
@@ -64,13 +82,11 @@
             <i data-lucide="message-square"></i>
         </div>
         <div class="w-8 h-[2px] bg-[#35363c] rounded my-1"></div>
-        
         <div id="dynamic-server-list" class="flex flex-col gap-2">
             <div onclick="switchServer('dev-space')" id="srv-dev-space" class="w-12 h-12 bg-[#313338] text-white flex items-center justify-center font-bold rounded-[24px] hover:rounded-[16px] hover:bg-[#5865f2] cursor-pointer transition-all duration-200">
-                <span>D</span>
+                <span>S</span>
             </div>
         </div>
-
         <div onclick="openModal('server-modal')" class="w-12 h-12 rounded-[24px] hover:rounded-[16px] bg-[#313338] hover:bg-[#23a55a] text-[#23a55a] hover:text-white flex items-center justify-center cursor-pointer transition-all duration-200 mt-1">
             <i data-lucide="plus"></i>
         </div>
@@ -78,20 +94,33 @@
 
     <div class="w-60 bg-[#2b2d31] flex flex-col shrink-0">
         <div id="server-header" class="h-12 border-b border-[#1f2023] flex items-center justify-between px-4 font-bold text-white text-[15px] shadow-sm">
-            <span>Dev Space Alpha</span>
+            <span>SimbanChat HQ</span>
         </div>
         
         <div class="flex-1 overflow-y-auto px-2 py-3 space-y-4">
             <div>
+                <div id="friends-nav-panel" class="hidden mb-4 space-y-[2px]">
+                    <div onclick="setHomeSubView('friends-list')" id="nav-friends-list" class="flex items-center px-2 py-2 rounded cursor-pointer text-white bg-[#404249]">
+                        <i data-lucide="users" class="w-5 h-5 mr-3 text-[#b5bac1]"></i>
+                        <span class="text-[15px] font-medium">Friends List</span>
+                    </div>
+                    <div onclick="setHomeSubView('pending-requests')" id="nav-pending-requests" class="flex items-center justify-between px-2 py-2 rounded cursor-pointer text-[#949ba4] hover:bg-[#35373c] hover:text-[#dbdee1]">
+                        <div class="flex items-center">
+                            <i data-lucide="user-check" class="w-5 h-5 mr-3 text-[#b5bac1]"></i>
+                            <span class="text-[15px] font-medium">Pending Requests</span>
+                        </div>
+                        <span id="pending-badge" class="hidden bg-[#f23f43] text-white text-xs font-bold px-1.5 py-0.5 rounded-full leading-none">0</span>
+                    </div>
+                </div>
+
                 <div class="flex items-center justify-between text-xs font-bold text-[#949ba4] px-2 mb-1 tracking-wider uppercase">
                     <span id="sidebar-list-title">CHANNELS / GROUPS</span>
-                    <i data-lucide="plus" onclick="openModal('channel-modal')" class="w-4 h-4 cursor-pointer hover:text-white"></i>
+                    <i id="add-channel-icon" data-lucide="plus" onclick="openModal('channel-modal')" class="w-4 h-4 cursor-pointer hover:text-white"></i>
                 </div>
-                <div id="channel-list" class="space-y-[2px]">
-                    </div>
+                <div id="channel-list" class="space-y-[2px]"></div>
             </div>
         </div>
-
+        
         <div id="voice-connected-bar" class="hidden bg-[#232428] border-b border-[#1f2023] p-2 flex flex-col gap-1.5 animate-pulse">
             <div class="flex items-center gap-2 text-[#23a55a] text-xs font-bold uppercase">
                 <i data-lucide="signal" class="w-3.5 h-3.5"></i>
@@ -102,54 +131,60 @@
                 <button onclick="terminateCall()" class="text-[#f23f43] hover:text-red-500 font-bold bg-[#313338] px-2 py-0.5 rounded">Disconnect</button>
             </div>
         </div>
-
+        
         <div class="h-14 bg-[#232428] flex items-center justify-between px-2">
             <div class="flex items-center gap-2 min-w-0 flex-1">
                 <div id="user-avatar" class="w-8 h-8 rounded-full bg-[#5865f2] flex items-center justify-center text-white font-bold text-sm shrink-0">U</div>
                 <div class="flex flex-col min-w-0">
                     <span id="user-display-name" class="text-sm font-semibold text-white truncate leading-tight">Creator</span>
-                    <span class="text-xs text-[#949ba4] leading-none">Online</span>
+                    <span class="text-xs text-[#23a55a] font-medium leading-none mt-0.5" id="user-profile-tag">@username</span>
                 </div>
             </div>
-            <div class="flex items-center text-[#b5bac1] gap-1">
-                <i data-lucide="mic" class="w-4 h-4 p-1 hover:bg-[#35373c] rounded cursor-pointer"></i>
-                <i data-lucide="headphones" class="w-4 h-4 p-1 hover:bg-[#35373c] rounded cursor-pointer"></i>
+            <div class="flex items-center text-[#b5bac1] gap-2">
+                <button onclick="location.reload()" title="Logout / Reset" class="hover:text-red-400 p-1 rounded"><i data-lucide="log-out" class="w-4 h-4"></i></button>
             </div>
         </div>
     </div>
 
     <div class="flex-1 flex flex-col bg-[#313338] min-w-0">
+        
         <div class="h-12 border-b border-[#1f2023] flex items-center justify-between px-4 shadow-sm shrink-0">
             <div class="flex items-center gap-2">
                 <i data-lucide="hash" id="header-icon" class="text-[#80848e] w-5 h-5"></i>
                 <span id="chat-header-title" class="font-bold text-white text-[15px]">general</span>
             </div>
-            <div id="call-actions" class="flex items-center gap-4 text-[#b5bac1]">
-                <i data-lucide="phone" onclick="initiateCall('voice')" class="w-5 h-5 hover:text-white cursor-pointer" title="Start Voice Call"></i>
-                <i data-lucide="video" onclick="initiateCall('video')" class="w-5 h-5 hover:text-white cursor-pointer" title="Start Video Call"></i>
+            
+            <div class="flex items-center gap-4">
+                <button id="add-friend-top-btn" onclick="openModal('friend-modal')" class="hidden bg-[#248046] hover:bg-[#1a6535] text-white text-xs font-semibold px-2.5 py-1.5 rounded transition-colors">
+                    Add Friend
+                </button>
+                <div id="call-actions" class="flex items-center gap-4 text-[#b5bac1]">
+                    <i data-lucide="phone" onclick="initiateCall('voice')" class="w-5 h-5 hover:text-white cursor-pointer"></i>
+                    <i data-lucide="video" onclick="initiateCall('video')" class="w-5 h-5 hover:text-white cursor-pointer"></i>
+                </div>
             </div>
         </div>
 
         <div id="video-stream-grid" class="hidden bg-black p-4 flex gap-4 justify-center items-center relative min-h-[260px] border-b border-zinc-900">
             <div class="w-1/2 max-w-[320px] aspect-video bg-zinc-800 rounded relative overflow-hidden flex flex-col justify-center items-center">
-                <video id="local-video" autoplay playsinline class="w-full h-full object-cover hidden"></style>
+                <video id="local-video" autoplay playsinline class="w-full h-full object-cover hidden"></video>
                 <div id="video-avatar-placeholder" class="w-12 h-12 rounded-full bg-[#5865f2] text-white flex items-center justify-center font-bold text-xl">U</div>
-                <span class="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">You (Local Frame)</span>
+                <span class="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">You</span>
             </div>
             <div class="w-1/2 max-w-[320px] aspect-video bg-zinc-800 rounded relative flex flex-col justify-center items-center text-center">
                 <div class="w-12 h-12 rounded-full bg-[#23a55a] text-white flex items-center justify-center font-bold text-xl animate-bounce">P</div>
-                <span class="text-xs text-[#949ba4] mt-2">Connecting remote peer...</span>
-                <span class="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">Remote Participant</span>
+                <span class="text-xs text-[#949ba4] mt-2">Connecting peer...</span>
             </div>
             <button onclick="terminateCall()" class="absolute bottom-4 right-4 bg-[#f23f43] hover:bg-red-600 text-white p-2 rounded-full shadow-lg">
                 <i data-lucide="phone-off" class="w-5 h-5"></i>
             </button>
         </div>
 
-        <div id="message-stream" class="flex-1 overflow-y-auto p-4 space-y-4">
-            </div>
+        <div id="main-content-window" class="flex-1 overflow-y-auto p-4 flex flex-col">
+            <div id="message-stream" class="space-y-4 flex-1"></div>
+        </div>
 
-        <div class="px-4 pb-6 shrink-0">
+        <div id="input-chat-box-area" class="px-4 pb-6 shrink-0">
             <form onsubmit="sendMessage(event)" class="bg-[#383a40] rounded-lg flex items-center px-4 py-2.5 gap-4">
                 <input id="chat-input" type="text" placeholder="Message channel" class="bg-transparent flex-1 text-[#dbdee1] placeholder-[#6d7178] focus:outline-none text-[15px]" autocomplete="off">
             </form>
@@ -169,145 +204,372 @@
 
     <div id="channel-modal" class="hidden absolute inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
         <div class="bg-[#313338] w-full max-w-[400px] rounded-lg p-6 shadow-2xl">
-            <h2 id="modal-channel-title" class="text-xl font-bold text-white mb-2">Create Dynamic Link</h2>
+            <h2 id="modal-channel-title" class="text-xl font-bold text-white mb-2">Create Target Node</h2>
             <div class="space-y-3 mb-4">
                 <div>
-                    <label class="block text-xs font-bold text-[#b5bac1] uppercase mb-1">Target Identity Name</label>
-                    <input id="new-channel-name" type="text" placeholder="e.g. general / squad-group" class="w-full bg-[#1e1f22] border-none rounded p-2.5 text-[#dbdee1] focus:outline-none">
+                    <label class="block text-xs font-bold text-[#b5bac1] uppercase mb-1">Name</label>
+                    <input id="new-channel-name" type="text" class="w-full bg-[#1e1f22] border-none rounded p-2.5 text-[#dbdee1] focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-[#b5bac1] uppercase mb-1">Connection Format Type</label>
+                    <label class="block text-xs font-bold text-[#b5bac1] uppercase mb-1">Type</label>
                     <select id="new-channel-type" class="w-full bg-[#1e1f22] border-none rounded p-2.5 text-[#dbdee1] focus:outline-none">
-                        <option value="text">Text Node Channel</option>
-                        <option value="voice">Voice Streaming Room</option>
+                        <option value="text">Text Node</option>
+                        <option value="voice">Voice Room</option>
                     </select>
                 </div>
             </div>
             <div class="flex justify-end gap-2">
                 <button onclick="closeModal('channel-modal')" class="text-sm font-medium text-white px-4">Cancel</button>
-                <button onclick="createChannel()" class="bg-[#23a55a] text-white px-5 py-2 rounded">Generate Entry</button>
+                <button onclick="createChannel()" class="bg-[#23a55a] text-white px-5 py-2 rounded">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="friend-modal" class="hidden absolute inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+        <div class="bg-[#313338] w-full max-w-[420px] rounded-lg p-6 shadow-2xl">
+            <h2 class="text-xl font-bold text-white mb-1">Add Friend</h2>
+            <p class="text-[#949ba4] text-xs mb-4">Send an official friend request by typing their username tag.</p>
+            <div>
+                <input id="friend-username-input" type="text" placeholder="Enter username (try 'simba' or 'alex')" class="w-full bg-[#1e1f22] border-none rounded p-3 text-[#dbdee1] mb-4 focus:outline-none placeholder-[#6d7178] text-sm">
+            </div>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeModal('friend-modal')" class="text-sm font-medium text-white px-4">Cancel</button>
+                <button onclick="handleAddFriendSubmit()" class="bg-[#5865f2] hover:bg-[#4752c4] text-white text-sm px-5 py-2 rounded font-medium transition-colors">Send Friend Request</button>
             </div>
         </div>
     </div>
 
     <script>
         let currentUser = null;
-        let activeServer = "dev-space"; // Matches key index maps or 'home-dm'
+        let activeServer = "dev-space";
         let activeChannel = "general";
-        let streamTrackInstance = null; // Stores hardware handle hook data
+        let homeSubView = "friends-list"; 
+        let streamTrackInstance = null;
 
-        let accountsDb = { "admin": { username: "admin", displayName: "Administrator", password: "123" } };
-
-        // Hybrid State Database mapping structural models
+        // Mock Database Mocking Framework Setup
         let appData = {
-            "home-dm": {
-                name: "Direct Group Messages",
-                channels: [
-                    { id: "squad-chat", name: "Gaming Squad (Group)", type: "text" },
-                    { id: "dev-team", name: "Core Engine Devs (Group)", type: "text" }
-                ],
-                messages: {
-                    "squad-chat": [{ user: "GamerX", text: "This custom group chat layout is fast.", time: "4:00 PM" }],
-                    "dev-team": [{ user: "System", text: "Group encrypted system node created.", time: "Just now" }]
-                }
-            },
             "dev-space": {
-                name: "Dev Space Alpha",
+                name: "SimbanChat HQ",
                 channels: [
                     { id: "general", name: "general", type: "text" },
-                    { id: "voice-lounge", name: "Voice Lounge Room", type: "voice" }
+                    { id: "lounge-voice", name: "Lounge Room", type: "voice" }
                 ],
                 messages: {
-                    "general": [{ user: "CyberKnight", text: "Welcome to the full upgrade engine matrix!", time: "4:15 PM" }]
+                    "general": [
+                        { user: "System Backend", text: "SimbanChat deployment engine active." }
+                    ]
                 }
             }
         };
 
+        // Shared Local System Register Map
+        let accountsDb = { 
+            "admin": { username: "admin", email: "admin@simbanchat.com", displayName: "Administrator", password: "123", friends: [], pendingIncoming: [], pendingOutgoing: [] },
+            "simba": { username: "simba", email: "simba@simbanchat.com", displayName: "Simba Bro", password: "123", friends: [], pendingIncoming: [], pendingOutgoing: [] },
+            "alex": { username: "alex", email: "alex@simbanchat.com", displayName: "Alex Dev", password: "123", friends: [], pendingIncoming: [], pendingOutgoing: [] }
+        };
+
+        let directMessageStore = {}; 
+
         function toggleAuthCard(view) {
-            document.getElementById('login-card').classList.toggle('hidden', view === 'register');
-            document.getElementById('register-card').classList.toggle('hidden', view === 'login');
+            document.getElementById('login-card').classList.toggle('hidden', view !== 'login');
+            document.getElementById('register-card').classList.toggle('hidden', view !== 'register');
+            document.getElementById('forgot-card').classList.toggle('hidden', view !== 'forgot');
         }
 
         function handleRegister(e) {
             e.preventDefault();
+            const email = document.getElementById('reg-email').value.trim();
             const username = document.getElementById('reg-username').value.trim().toLowerCase();
             const display = document.getElementById('reg-display').value.trim();
-            accountsDb[username] = { username, displayName: display, password: document.getElementById('reg-password').value };
+            const password = document.getElementById('reg-password').value;
+
+            if (accountsDb[username]) {
+                alert("Username already logged on system records!");
+                return;
+            }
+
+            // Instantly logs in locally with absolute zero network delays
+            accountsDb[username] = { username, email, displayName: display, password, friends: [], pendingIncoming: [], pendingOutgoing: [] };
             loginUser(accountsDb[username]);
         }
 
         function handleLogin(e) {
             e.preventDefault();
-            const account = accountsDb[document.getElementById('login-id').value.trim().toLowerCase()];
-            if (account && account.password === document.getElementById('login-password').value) {
-                loginUser(account);
-            } else { alert("Invalid credentials! Tip: Use user 'admin' pass '123'"); }
+            const inputVal = document.getElementById('login-id').value.trim().toLowerCase();
+            const passwordVal = document.getElementById('login-password').value;
+            
+            let foundAccount = accountsDb[inputVal];
+            if(!foundAccount) {
+                foundAccount = Object.values(accountsDb).find(acc => acc.email.toLowerCase() === inputVal);
+            }
+
+            if (foundAccount && foundAccount.password === passwordVal) {
+                loginUser(foundAccount);
+            } else { 
+                alert("Incorrect matching credentials!"); 
+            }
+        }
+
+        function handleForgotPasswordRequest(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('forgot-email').value.trim().toLowerCase();
+            let matchedAccount = Object.values(accountsDb).find(acc => acc.email.toLowerCase() === emailInput);
+            
+            if(matchedAccount) {
+                alert(`Account recovered locally! Username: ${matchedAccount.username} | Password: ${matchedAccount.password}`);
+                toggleAuthCard('login');
+            } else {
+                alert("No account found matching that email profile record layout!");
+            }
+        }
+
+        function handleAddFriendSubmit() {
+            const inputField = document.getElementById('friend-username-input');
+            const targetUsername = inputField.value.trim().toLowerCase();
+
+            if (!targetUsername) return;
+
+            if (targetUsername === currentUser.username) {
+                alert("You cannot add yourself!");
+                return;
+            }
+
+            if (currentUser.friends.includes(targetUsername)) {
+                alert("Already friends!");
+                return;
+            }
+
+            if (currentUser.pendingOutgoing.includes(targetUsername)) {
+                alert("Friend request already pending!");
+                return;
+            }
+
+            const targetAccount = accountsDb[targetUsername];
+            if (targetAccount) {
+                currentUser.pendingOutgoing.push(targetUsername);
+                targetAccount.pendingIncoming.push(currentUser.username);
+
+                alert(`Friend request dispatched to ${targetAccount.displayName}! Log out and log back in as "${targetUsername}" to accept it.`);
+                inputField.value = '';
+                closeModal('friend-modal');
+                renderAll();
+            } else {
+                alert(`Username entry "${targetUsername}" not found inside registry tables.`);
+            }
+        }
+
+        function acceptFriendRequest(senderUsername) {
+            const senderAccount = accountsDb[senderUsername];
+            if (!senderAccount) return;
+
+            currentUser.pendingIncoming = currentUser.pendingIncoming.filter(u => u !== senderUsername);
+            senderAccount.pendingOutgoing = senderAccount.pendingOutgoing.filter(u => u !== currentUser.username);
+
+            currentUser.friends.push(senderUsername);
+            senderAccount.friends.push(currentUser.username);
+
+            const dmChannelId = [currentUser.username, senderUsername].sort().join("-");
+            directMessageStore[dmChannelId] = [{ user: "System", text: `Friend authorization confirmed! Secured DM line connected with ${senderAccount.displayName}.` }];
+
+            alert(`Friend request accepted! ${senderAccount.displayName} added to directory.`);
+            renderAll();
+        }
+
+        function ignoreFriendRequest(senderUsername) {
+            const senderAccount = accountsDb[senderUsername];
+            currentUser.pendingIncoming = currentUser.pendingIncoming.filter(u => u !== senderUsername);
+            if(senderAccount) {
+                senderAccount.pendingOutgoing = senderAccount.pendingOutgoing.filter(u => u !== currentUser.username);
+            }
+            renderAll();
         }
 
         function loginUser(account) {
             currentUser = account;
             document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('user-profile-tag').innerText = `@${currentUser.username}`;
             document.getElementById('user-display-name').innerText = currentUser.displayName;
             document.getElementById('user-avatar').innerText = currentUser.displayName.charAt(0).toUpperCase();
             switchServer('dev-space');
         }
 
+        function setHomeSubView(view) {
+            homeSubView = view;
+            activeChannel = null; 
+            renderAll();
+        }
+
         function renderAll() {
-            const context = appData[activeServer];
-            document.getElementById('server-header').firstElementChild.innerText = context.name;
-            document.getElementById('sidebar-list-title').innerText = activeServer === 'home-dm' ? "GROUP CHATS" : "TEXT & VOICE CHANNELS";
-            document.getElementById('modal-channel-title').innerText = activeServer === 'home-dm' ? "Create New Group Chat" : "Create New Server Channel";
+            const isHomeDm = activeServer === "home-dm";
+            document.getElementById('friends-nav-panel').classList.toggle('hidden', !isHomeDm);
+            document.getElementById('add-friend-top-btn').classList.toggle('hidden', !isHomeDm);
+            document.getElementById('add-channel-icon').classList.toggle('hidden', isHomeDm);
+            document.getElementById('sidebar-list-title').innerText = isHomeDm ? "DIRECT MESSAGES" : "CHANNELS / GROUPS";
 
-            // Highlight Active States in Left Sidebar Dock
-            document.getElementById('srv-home-dm').classList.toggle('bg-[#5865f2]', activeServer === 'home-dm');
-            document.getElementById('srv-home-dm').classList.toggle('text-white', activeServer === 'home-dm');
-
-            // Render Sidebar Channels List
-            const listContainer = document.getElementById('channel-list');
-            listContainer.innerHTML = '';
-            context.channels.forEach(ch => {
-                const isSelected = ch.id === activeChannel;
-                const icon = ch.type === 'text' ? 'hash' : 'volume-2';
-                listContainer.innerHTML += `
-                    <div onclick="handleChannelClick('${ch.id}', '${ch.type}')" class="flex items-center px-2 py-1.5 rounded cursor-pointer ${isSelected ? 'bg-[#404249] text-white' : 'text-[#949ba4] hover:bg-[#35373c] hover:text-[#dbdee1]'}">
-                        <i data-lucide="${icon}" class="w-4 h-4 mr-2 text-[#80848e]"></i>
-                        <span class="text-[15px] truncate font-medium">${ch.name}</span>
-                    </div>`;
-            });
-
-            // Adjust Top Bar Headers based on Text Node vs Voice Node context
-            const activeChannelObj = context.channels.find(c => c.id === activeChannel);
-            if (activeChannelObj) {
-                document.getElementById('chat-header-title').innerText = activeChannelObj.name;
-                document.getElementById('header-icon').setAttribute('data-lucide', activeChannelObj.type === 'text' ? 'hash' : 'volume-2');
-                document.getElementById('chat-input').placeholder = `Message #${activeChannelObj.name}`;
+            if(currentUser && currentUser.pendingIncoming.length > 0) {
+                document.getElementById('pending-badge').innerText = currentUser.pendingIncoming.length;
+                document.getElementById('pending-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('pending-badge').classList.add('hidden');
             }
 
-            // Render Messages Frame
-            const msgStream = document.getElementById('message-stream');
-            msgStream.innerHTML = `<div class="mt-4"><h1 class="text-2xl font-bold">Welcome to ${activeChannelObj ? activeChannelObj.name : 'Channel'}!</h1><p class="text-sm text-[#949ba4]">This is the threshold of this layout element space.</p></div><div class="w-full h-[1px] bg-[#3f4147] my-4"></div>`;
+            if (!isHomeDm) {
+                const context = appData[activeServer];
+                document.getElementById('server-header').firstElementChild.innerText = context.name;
+                
+                const listContainer = document.getElementById('channel-list');
+                listContainer.innerHTML = '';
+                context.channels.forEach(ch => {
+                    const isSelected = ch.id === activeChannel;
+                    listContainer.innerHTML += `
+                        <div onclick="handleChannelClick('${ch.id}', '${ch.type}')" class="flex items-center px-2 py-1.5 rounded cursor-pointer ${isSelected ? 'bg-[#404249] text-white' : 'text-[#949ba4] hover:bg-[#35373c]'}">
+                            <i data-lucide="${ch.type === 'text' ? 'hash' : 'volume-2'}" class="w-4 h-4 mr-2 text-[#80848e]"></i>
+                            <span class="text-[15px] truncate">${ch.name}</span>
+                        </div>`;
+                });
+                document.getElementById('srv-home-dm').classList.remove('bg-[#5865f2]');
+                renderChatSection(context.messages[activeChannel], `#${activeChannel}`, 'hash');
+            } else {
+                document.getElementById('server-header').firstElementChild.innerText = "Direct Messages";
+                document.getElementById('srv-home-dm').classList.add('bg-[#5865f2]');
+                
+                document.getElementById('nav-friends-list').classList.toggle('bg-[#404249]', homeSubView === 'friends-list' && !activeChannel);
+                document.getElementById('nav-friends-list').classList.toggle('text-white', homeSubView === 'friends-list' && !activeChannel);
+                document.getElementById('nav-pending-requests').classList.toggle('bg-[#404249]', homeSubView === 'pending-requests' && !activeChannel);
+                document.getElementById('nav-pending-requests').classList.toggle('text-white', homeSubView === 'pending-requests' && !activeChannel);
+
+                const listContainer = document.getElementById('channel-list');
+                listContainer.innerHTML = '';
+                
+                currentUser.friends.forEach(friendUser => {
+                    const friendAcc = accountsDb[friendUser];
+                    const chId = [currentUser.username, friendUser].sort().join("-");
+                    const isSelected = activeChannel === chId;
+                    
+                    listContainer.innerHTML += `
+                        <div onclick="handleChannelClick('${chId}', 'dm')" class="flex items-center px-2 py-1.5 rounded cursor-pointer ${isSelected ? 'bg-[#404249] text-white' : 'text-[#949ba4] hover:bg-[#35373c]'}">
+                            <div class="w-5 h-5 rounded-full bg-[#5865f2] text-white text-[10px] font-bold flex items-center justify-center mr-2 shrink-0">${friendAcc.displayName.charAt(0)}</div>
+                            <span class="text-[15px] truncate">${friendAcc.displayName}</span>
+                        </div>`;
+                });
+
+                if (activeChannel) {
+                    const runningTargetName = Object.values(accountsDb).find(a => activeChannel.includes(a.username) && a.username !== currentUser.username);
+                    renderChatSection(directMessageStore[activeChannel], runningTargetName ? runningTargetName.displayName : "Direct Chat", 'user');
+                } else if (homeSubView === 'friends-list') {
+                    renderFriendsDashboardView();
+                } else if (homeSubView === 'pending-requests') {
+                    renderPendingDashboardView();
+                }
+            }
+            lucide.createIcons();
+        }
+
+        function renderChatSection(messagesArray, headerTitle, systemIconString) {
+            document.getElementById('chat-header-title').innerText = headerTitle;
+            document.getElementById('header-icon').setAttribute('data-lucide', systemIconString);
+            document.getElementById('input-chat-box-area').classList.remove('hidden');
+            document.getElementById('call-actions').classList.remove('hidden');
+
+            const viewStream = document.getElementById('main-content-window');
+            viewStream.innerHTML = `<div id="message-stream" class="flex-1 space-y-4"></div>`;
+            const innerStream = document.getElementById('message-stream');
+
+            innerStream.innerHTML = `<div class="mt-4"><h1 class="text-2xl font-bold">Welcome to ${headerTitle}!</h1></div><div class="w-full h-[1px] bg-[#3f4147] my-4"></div>`;
             
-            const msgs = context.messages[activeChannel] || [];
-            msgs.forEach(m => {
-                msgStream.innerHTML += `
-                    <div class="flex gap-4 px-2 py-1 hover:bg-[#2e3035] rounded">
-                        <div class="w-10 h-10 rounded-full bg-[#404249] text-white flex items-center justify-center font-bold">${m.user.charAt(0).toUpperCase()}</div>
+            (messagesArray || []).forEach(m => {
+                innerStream.innerHTML += `
+                    <div class="flex gap-4 px-2 py-1">
+                        <div class="w-10 h-10 rounded-full bg-[#404249] text-white flex items-center justify-center font-bold shrink-0">${m.user.charAt(0).toUpperCase()}</div>
                         <div>
-                            <div class="flex items-baseline gap-2"><span class="font-medium text-white">${m.user}</span><span class="text-xs text-[#949ba4]">${m.time}</span></div>
+                            <div class="flex items-baseline gap-2"><span class="font-medium text-white">${m.user}</span></div>
                             <p class="text-[#dbdee1] mt-0.5">${m.text}</p>
                         </div>
                     </div>`;
             });
-            msgStream.scrollTop = msgStream.scrollHeight;
-            lucide.createIcons();
+            viewStream.scrollTop = viewStream.scrollHeight;
+        }
+
+        function renderFriendsDashboardView() {
+            document.getElementById('chat-header-title').innerText = "Friends Directory";
+            document.getElementById('header-icon').setAttribute('data-lucide', 'users');
+            document.getElementById('input-chat-box-area').classList.add('hidden');
+            document.getElementById('call-actions').classList.add('hidden');
+
+            const viewStream = document.getElementById('main-content-window');
+            viewStream.innerHTML = `<h3 class="text-xs font-bold text-[#949ba4] uppercase tracking-wider mb-4">All Friends — ${currentUser.friends.length}</h3><div id="friends-list-container" class="space-y-2"></div>`;
+            const container = document.getElementById('friends-list-container');
+
+            if(currentUser.friends.length === 0) {
+                container.innerHTML = `<div class="text-[#949ba4] text-sm py-8 text-center">No friends connected yet. Click Add Friend above!</div>`;
+                return;
+            }
+
+            currentUser.friends.forEach(fUser => {
+                const acc = accountsDb[fUser];
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 hover:bg-[#3f4248]/40 border-t border-[#3f4147]/40 rounded-lg group transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-[#5865f2] text-white font-bold flex items-center justify-center">${acc.displayName.charAt(0)}</div>
+                            <div>
+                                <div class="font-semibold text-white text-sm">${acc.displayName}</div>
+                                <div class="text-xs text-[#23a55a]">Online</div>
+                            </div>
+                        </div>
+                        <button onclick="handleChannelClick('${[currentUser.username, fUser].sort().join("-")}', 'dm')" class="bg-[#2b2d31] hover:bg-[#1e1f22] p-2 rounded-full text-[#b5bac1] hover:text-white transition-colors"><i data-lucide="message-square" class="w-4 h-4"></i></button>
+                    </div>`;
+            });
+        }
+
+        function renderPendingDashboardView() {
+            document.getElementById('chat-header-title').innerText = "Pending Validation Nodes";
+            document.getElementById('header-icon').setAttribute('data-lucide', 'user-check');
+            document.getElementById('input-chat-box-area').classList.add('hidden');
+            document.getElementById('call-actions').classList.add('hidden');
+
+            const viewStream = document.getElementById('main-content-window');
+            viewStream.innerHTML = `<h3 class="text-xs font-bold text-[#949ba4] uppercase tracking-wider mb-4">Incoming Requests (${currentUser.pendingIncoming.length})</h3><div id="incoming-req-box" class="space-y-2 mb-8"></div><h3 class="text-xs font-bold text-[#949ba4] uppercase tracking-wider mb-4">Outgoing Requests (${currentUser.pendingOutgoing.length})</h3><div id="outgoing-req-box" class="space-y-2"></div>`;
+            
+            const incomingBox = document.getElementById('incoming-req-box');
+            const outgoingBox = document.getElementById('outgoing-req-box');
+
+            if(currentUser.pendingIncoming.length === 0) {
+                incomingBox.innerHTML = `<div class="text-[#949ba4] text-xs py-4">No inbound connection invites pending.</div>`;
+            } else {
+                currentUser.pendingIncoming.forEach(incUser => {
+                    const acc = accountsDb[incUser];
+                    incomingBox.innerHTML += `
+                        <div class="flex items-center justify-between p-3 bg-[#2b2d31]/50 rounded border border-[#3f4147]/30">
+                            <span class="text-sm font-medium text-white">${acc.displayName} <span class="text-xs text-[#949ba4]">(@${acc.username})</span></span>
+                            <div class="flex gap-2">
+                                <button onclick="acceptFriendRequest('${incUser}')" class="bg-[#23a55a] hover:bg-[#1a7f43] text-white p-1.5 text-xs rounded transition-colors"><i data-lucide="check" class="w-4 h-4"></i></button>
+                                <button onclick="ignoreFriendRequest('${incUser}')" class="bg-[#f23f43] hover:bg-red-700 text-white p-1.5 text-xs rounded transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>`;
+                });
+            }
+
+            if(currentUser.pendingOutgoing.length === 0) {
+                outgoingBox.innerHTML = `<div class="text-[#949ba4] text-xs py-4">No outbound requests active.</div>`;
+            } else {
+                currentUser.pendingOutgoing.forEach(outUser => {
+                    const acc = accountsDb[outUser];
+                    outgoingBox.innerHTML += `
+                        <div class="flex items-center justify-between p-3 bg-[#2b2d31]/20 rounded border border-[#3f4147]/10 text-sm">
+                            <span class="text-[#b5bac1]">${acc ? acc.displayName : outUser} <span class="text-xs text-[#6d7178]">(@${outUser})</span></span>
+                            <span class="text-xs font-medium text-[#949ba4] italic uppercase tracking-wider">Awaiting Verification</span>
+                        </div>`;
+                });
+            }
         }
 
         function handleChannelClick(id, type) {
             if (type === 'voice') {
                 initiateCall('voice', id);
-            } else {
-                activeChannel = id;
-                renderAll();
+            } else { 
+                activeChannel = id; 
+                renderAll(); 
             }
         }
 
@@ -315,9 +577,12 @@
             e.preventDefault();
             const input = document.getElementById('chat-input');
             if (!input.value.trim()) return;
-
-            if (!appData[activeServer].messages[activeChannel]) appData[activeServer].messages[activeChannel] = [];
-            appData[activeServer].messages[activeChannel].push({ user: currentUser.displayName, text: input.value.trim(), time: "Just now" });
+            
+            if(activeServer === 'home-dm') {
+                directMessageStore[activeChannel].push({ user: currentUser.displayName, text: input.value.trim() });
+            } else {
+                appData[activeServer].messages[activeChannel].push({ user: currentUser.displayName, text: input.value.trim() });
+            }
             input.value = '';
             renderAll();
         }
@@ -327,9 +592,8 @@
             if(!name) return;
             const id = 'srv-' + Date.now();
             appData[id] = { name: name, channels: [{ id: "general", name: "general", type: "text" }], messages: { "general": [] } };
-            
             document.getElementById('dynamic-server-list').innerHTML += `
-                <div onclick="switchServer('${id}')" id="srv-${id}" class="w-12 h-12 bg-[#313338] text-white flex items-center justify-center font-bold rounded-[24px] hover:rounded-[16px] hover:bg-[#5865f2] cursor-pointer transition-all duration-200">
+                <div onclick="switchServer('${id}')" id="srv-${id}" class="w-12 h-12 bg-[#313338] text-white flex items-center justify-center font-bold rounded-[24px] cursor-pointer transition-all duration-200">
                     <span>${name.charAt(0).toUpperCase()}</span>
                 </div>`;
             closeModal('server-modal');
@@ -337,71 +601,45 @@
         }
 
         function createChannel() {
-            const name = document.getElementById('new-channel-name').value.trim().toLowerCase().replace(/\s+/g, '-');
+            const name = document.getElementById('new-channel-name').value.trim().toLowerCase();
             const type = document.getElementById('new-channel-type').value;
             if(!name) return;
-
             appData[activeServer].channels.push({ id: name, name, type });
             if (type === 'text') appData[activeServer].messages[name] = [];
-            
             closeModal('channel-modal');
             activeChannel = name;
             renderAll();
         }
 
-        /* WEBRTC MEDIA HARDWARE CAPTURE STREAMS INTERFACES */
         async function initiateCall(format, targetRoomName = null) {
-            const roomLabel = targetRoomName || activeChannel;
             document.getElementById('voice-connected-bar').classList.remove('hidden');
-            document.getElementById('call-room-display').innerText = roomLabel;
-
+            document.getElementById('call-room-display').innerText = targetRoomName || "Channel Room";
             if (format === 'video') {
-                const grid = document.getElementById('video-stream-grid');
-                grid.classList.remove('hidden');
-                
+                document.getElementById('video-stream-grid').classList.remove('hidden');
                 try {
-                    // Requests real localized hardware pipeline access via browser specifications
                     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                     streamTrackInstance = stream;
-                    const videoTag = document.getElementById('local-video');
-                    videoTag.srcObject = stream;
-                    videoTag.classList.remove('hidden');
-                    document.getElementById('video-avatar-placeholder').classList.add('hidden');
-                } catch (err) {
-                    console.warn("Hardware peripheral stream blocked or camera missing:", err);
-                    alert("Voice frequency initiated! Webcam stream simulating (Hardware unavailable on win7 baseline context configurations without drivers).");
-                }
+                    document.getElementById('local-video').srcObject = stream;
+                    document.getElementById('local-video').classList.remove('hidden');
+                } catch (err) { console.log("Webcam setup simulated."); }
             }
-            lucide.createIcons();
         }
 
         function terminateCall() {
             document.getElementById('voice-connected-bar').classList.add('hidden');
             document.getElementById('video-stream-grid').classList.add('hidden');
-            
-            if (streamTrackInstance) {
-                streamTrackInstance.getTracks().forEach(track => track.stop());
-                streamTrackInstance = null;
-            }
-            const videoTag = document.getElementById('local-video');
-            videoTag.srcObject = null;
-            videoTag.classList.add('hidden');
-            document.getElementById('video-avatar-placeholder').classList.remove('hidden');
+            if (streamTrackInstance) streamTrackInstance.getTracks().forEach(t => t.stop());
         }
 
         function switchServer(id) {
             activeServer = id;
-            activeChannel = appData[id].channels[0].id;
+            if(id === 'home-dm') {
+                activeChannel = null;
+                homeSubView = "friends-list";
+            } else {
+                activeChannel = appData[id].channels[0].id;
+            }
             renderAll();
-            
-            // Adjust visual highlighting indicators across structural server map rows
-            document.querySelectorAll('#dynamic-server-list > div').forEach(el => {
-                const match = el.id === `srv-${id}`;
-                el.classList.toggle('bg-[#5865f2]', match);
-                el.classList.toggle('rounded-[16px]', match);
-                el.classList.toggle('rounded-[24px]', !match);
-                el.classList.toggle('bg-[#313338]', !match);
-            });
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
